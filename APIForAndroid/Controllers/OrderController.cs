@@ -4,8 +4,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using APIForAndroid.Models;
-using Newtonsoft.Json;
 
 namespace APIForAndroid.Controllers
 {
@@ -44,7 +42,8 @@ namespace APIForAndroid.Controllers
         {
             if (!order.Equals(null))
             {
-                Oder oder = new Oder() { 
+                Oder oder = new Oder()
+                {
                     IdAcc = order.IdAcc,
                     DateCreate = DateTime.Now,
                     Status = order.Status,
@@ -52,7 +51,7 @@ namespace APIForAndroid.Controllers
                     Address = order.Address,
                     SDT = order.SDT
                 };
-                Oder oderFind =  DBCandyBug.Oders.Add(oder);
+                Oder oderFind = DBCandyBug.Oders.Add(oder);
                 DBCandyBug.SaveChanges();
                 maDonHang = oderFind.Id;
                 return JsonConvert.SerializeObject("Bạn đã có hóa đơn của mình");
@@ -64,7 +63,7 @@ namespace APIForAndroid.Controllers
         [HttpPost]
         public void addOrderInFo([FromBody] OrderInfo orderInfo)
         {
-            
+
         }
 
         // PUT api/<controller>/5
