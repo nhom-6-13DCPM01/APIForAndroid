@@ -4,13 +4,15 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using APIForAndroid.Models;
+using Newtonsoft.Json;
 
 namespace APIForAndroid.Controllers
 {
     public class OrderController : ApiController
     {
         private CandybugWinformEntities DBCandyBug = new CandybugWinformEntities();
-        private int maDonHang = 0;
+        private int maDonHang;
 
         // GET api/<controller>
         public IEnumerable<string> Get()
@@ -28,7 +30,10 @@ namespace APIForAndroid.Controllers
         [HttpGet]
         public void GetOrderInfoList()
         {
+            var danhSach = DBCandyBug.OrderInfoes.Select(u => new
+            {
 
+            });
         }
 
         // POST api/<controller>
@@ -63,7 +68,15 @@ namespace APIForAndroid.Controllers
         [HttpPost]
         public void addOrderInFo([FromBody] OrderInfo orderInfo)
         {
-
+            OrderInfo order = new OrderInfo()
+            {
+                IdOrder = maDonHang,
+                IdProduct = orderInfo.IdProduct,
+                Quantity = orderInfo.Quantity,
+                Total = orderInfo.Total
+            };
+            DBCandyBug.OrderInfoes.Add(orderInfo);
+            DBCandyBug.SaveChanges();
         }
 
         // PUT api/<controller>/5
