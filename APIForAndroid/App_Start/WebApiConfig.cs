@@ -33,6 +33,24 @@ namespace APIForAndroid
                 routeTemplate: "api-getCategory",
                 defaults: new { controller = "Category", action = "getCategory" }
             );
+
+            config.Routes.MapHttpRoute(
+                name: "getNew",
+                routeTemplate: "api-getNewProduct",
+                defaults: new { controller = "Product", action = "getNewProduct" }
+            );
+
+            config.Routes.MapHttpRoute(
+                name: "getProduct",
+                routeTemplate: "api-getProduct",
+                defaults: new { controller = "Product", action = "Get" }
+            );
+
+            config.Routes.MapHttpRoute(
+                name: "getProbyCate",
+                routeTemplate: "api-getProbyCate/{idCate}",
+                defaults: new {controller = "Product", action = "getProbyCate", idCate = RouteParameter.Optional }
+            );
         }
     }
 }

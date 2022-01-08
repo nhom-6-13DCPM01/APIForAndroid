@@ -13,6 +13,7 @@ namespace APIForAndroid.Controllers
     {
         CandybugWinformEntities db = new CandybugWinformEntities();
         // GET api/<controller>
+        [HttpGet]
         public IHttpActionResult Get()
         {
             var list = (from c in db.Products
@@ -25,11 +26,33 @@ namespace APIForAndroid.Controllers
                             Producer = c.Producer.Name,
                             Quantity = c.Quantity,
                             Discount = c.Discount,
-                            Image = "http://ushop.somee.com/Content/Client/img/" + c.Image
+                            Description = c.Description,
+                            Image = "http://candybug.somee.com/Content/Client/img/" + c.Image
                         }).ToList();
             return Ok(list);
         }
 
+        [HttpGet]
+        public IHttpActionResult getNewProduct()
+        {
+            var list = (from c in db.Products
+                        orderby c.DateCreate descending
+                        select new
+                        {
+                            Id = c.Id,
+                            Name = c.Name,
+                            Category = c.Category.Name,
+                            Price = c.Price,
+                            Producer = c.Producer.Name,
+                            Quantity = c.Quantity,
+                            Discount = c.Discount,
+                            Description = c.Description,
+                            Image = "http://candybug.somee.com/Content/Client/img/" + c.Image
+                        }).ToList().Take(6);
+            return Ok(list);
+        }
+
+        [HttpGet]
         // GET api/<controller>/5
         public IHttpActionResult Get(int id)
         {
@@ -44,20 +67,39 @@ namespace APIForAndroid.Controllers
                                 Producer = c.Producer.Name,
                                 Quantity = c.Quantity,
                                 Discount = c.Discount,
+                                Description = c.Description,
                                 Image = "http://ushop.somee.com/Content/Client/img/" + c.Image
                             });
+            return Ok(product);
+        }
+
+        [HttpGet]
+        public IHttpActionResult getProbyCate(int idCate,[FromUri] int page)
+        {
+            int space=5;
+            int limit= (page-1) * space ;
+            var product = (from c in db.Products
+                           where c.IdCategory == idCate
+                           orderby c.Id ascending
+                           select new
+                           {
+                               Id = c.Id,
+                               Name = c.Name,
+                               Category = c.Category.Name,
+                               Price = c.Price,
+                               Producer = c.Producer.Name,
+                               Quantity = c.Quantity,
+                               Discount = c.Discount,
+                               Description = c.Description,
+                               Image = "http://ushop.somee.com/Content/Client/img/" + c.Image
+                           }).Skip(limit).Take(space);
             return Ok(product);
         }
 
         [HttpPost]
         public string Post([FromBody] Account account)
         {
-            Account product = db.Accounts.SingleOrDefault(c => c.UserName == account.UserName && c.PassWord == account.PassWord);
-            if (product != null)
-            {
-                return JsonConvert.SerializeObject("Login Successfull!!");
-            }
-            return JsonConvert.SerializeObject("Wrong!!");
+            return "";
         }
 
         // PUT api/<controller>/5
