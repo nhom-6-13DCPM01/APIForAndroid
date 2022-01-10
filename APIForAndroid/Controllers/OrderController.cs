@@ -28,23 +28,26 @@ namespace APIForAndroid.Controllers
 
         [Route("getMaxIdOrder")]
         [HttpGet]
-        public void GetIdOrder()
-        {
-
-        }
-
-        public int timSoLonNhat()
+        public int GetIdOrder()
         {
             int a = 0;
             var danhSach = DBCandyBug.Oders.ToList();
 
-            foreach(var item in danhSach)
+            foreach (var item in danhSach)
             {
                 if (item.Id > a)
                     a = item.Id;
             }
 
             return a;
+        }
+
+        [Route("getTongSoLuongOrderChuaDuyet")]
+        [HttpGet]
+        public int GetTongSoLuongOrderChuaDuyet()
+        {
+            int soLuong = DBCandyBug.Oders.Where(h => h.Status.Equals("CHƯA DUYỆT")).Count();
+            return soLuong;
         }
 
         [Route("getOrderInfoList")]
@@ -64,7 +67,7 @@ namespace APIForAndroid.Controllers
 
         [Route("createOrder")]
         [HttpPost]
-        public String CreateOrder([FromBody] Oder order)
+        public IHttpActionResult CreateOrder([FromBody] Oder order)
         {
             if (!order.Equals(null))
             {
@@ -80,9 +83,9 @@ namespace APIForAndroid.Controllers
                 Oder oderFind = DBCandyBug.Oders.Add(oder);
                 DBCandyBug.SaveChanges();
                 maDonHang = oderFind.Id;
-                return JsonConvert.SerializeObject("Bạn đã có hóa đơn của mình \n" + "Mã hóa đơn của bạn: " + oderFind.Id.ToString());
+                return Ok(oderFind);
             }
-            return JsonConvert.SerializeObject("Xin lỗi bạn có thể báo cáo lỗi với bên mình để chúng mình khắc phục");
+            return null;
         }
 
         [Route("addOrderInfo")]
