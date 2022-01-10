@@ -26,6 +26,27 @@ namespace APIForAndroid.Controllers
             return "value";
         }
 
+        [Route("getMaxIdOrder")]
+        [HttpGet]
+        public void GetIdOrder()
+        {
+
+        }
+
+        public int timSoLonNhat()
+        {
+            int a = 0;
+            var danhSach = DBCandyBug.Oders.ToList();
+
+            foreach(var item in danhSach)
+            {
+                if (item.Id > a)
+                    a = item.Id;
+            }
+
+            return a;
+        }
+
         [Route("getOrderInfoList")]
         [HttpGet]
         public void GetOrderInfoList()
@@ -50,16 +71,16 @@ namespace APIForAndroid.Controllers
                 Oder oder = new Oder()
                 {
                     IdAcc = order.IdAcc,
-                    DateCreate = DateTime.Now,
+                    DateCreate = order.DateCreate,
                     Status = order.Status,
-                    DeliveryDate = null,
+                    DeliveryDate = order.DeliveryDate,
                     Address = order.Address,
                     SDT = order.SDT
                 };
                 Oder oderFind = DBCandyBug.Oders.Add(oder);
                 DBCandyBug.SaveChanges();
                 maDonHang = oderFind.Id;
-                return JsonConvert.SerializeObject("Bạn đã có hóa đơn của mình");
+                return JsonConvert.SerializeObject("Bạn đã có hóa đơn của mình \n" + "Mã hóa đơn của bạn: " + oderFind.Id.ToString());
             }
             return JsonConvert.SerializeObject("Xin lỗi bạn có thể báo cáo lỗi với bên mình để chúng mình khắc phục");
         }
