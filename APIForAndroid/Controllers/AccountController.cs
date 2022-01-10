@@ -12,37 +12,41 @@ namespace APIForAndroid.Controllers
     public class AccountController : ApiController
     {
         CandybugWinformEntities db = new CandybugWinformEntities();
-        // GET api/<controller>
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/<controller>/5
-        public string Get(int id)
-        {
-            return "value";
-        }
 
         [HttpPost]
-        public string Login([FromBody] Account account)
+        public IHttpActionResult Login([FromBody] Account account)
         {
-            Account product = db.Accounts.SingleOrDefault(c => c.UserName == account.UserName && c.PassWord == account.PassWord);
-            if (product != null)
+            var accountLogin = (from c in db.Accounts
+                                where c.UserName == account.UserName && c.PassWord == account.PassWord
+                                select new
+                                {
+                                    UserName = c.UserName,
+                                    PassWord = c.PassWord,
+                                    DisplayName = c.DisplayName,
+                                    Email = c.Email,
+                                    SDT = c.SDT,
+                                }).FirstOrDefault();
+            if (accountLogin != null)
             {
-                return JsonConvert.SerializeObject("Login Successfull!!");
+                return Ok(accountLogin);
             }
-            return JsonConvert.SerializeObject("Wrong the Username or Password!!");
+            return null;
         }
 
-        // PUT api/<controller>/5
-        public void Put(int id, [FromBody] string value)
+        [Route("api-register")]
+        [HttpPost]
+        public IHttpActionResult Register([FromBody] Account account)
         {
+
+            var accountCheck = db.Accounts.Where(c => c.UserName == account.UserName).ToList();
+            if (accountCheck.Count() > 0)
+            {
+                return null;
+            }
+            db.Accounts.Add(account);
+            db.SaveChanges();
+            return Ok(account);
         }
 
-        // DELETE api/<controller>/5
-        public void Delete(int id)
-        {
-        }
     }
 }
