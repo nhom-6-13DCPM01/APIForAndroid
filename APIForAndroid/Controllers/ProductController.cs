@@ -76,7 +76,7 @@ namespace APIForAndroid.Controllers
         [HttpGet]
         public IHttpActionResult getProbyCate(int idCate,[FromUri] int page)
         {
-            int space=5;
+            int space=6;
             int limit= (page-1) * space ;
             var product = (from c in db.Products
                            where c.IdCategory == idCate
@@ -95,21 +95,29 @@ namespace APIForAndroid.Controllers
                            }).Skip(limit).Take(space);
             return Ok(product);
         }
-
-        [HttpPost]
-        public string Post([FromBody] Account account)
+        [Route("api-searchProduct")]
+        [HttpGet]
+        public IHttpActionResult searchProduct(string key, [FromUri] int page)
         {
-            return "";
+            int space = 6;
+            int limit = (page - 1) * space;
+            var product = (from c in db.Products
+                           where c.Name.Contains(key)
+                           orderby c.Id ascending
+                           select new
+                           {
+                               Id = c.Id,
+                               Name = c.Name,
+                               Category = c.Category.Name,
+                               Price = c.Price,
+                               Producer = c.Producer.Name,
+                               Quantity = c.Quantity,
+                               Discount = c.Discount,
+                               Description = c.Description,
+                               Image = "http://ushop.somee.com/Content/Client/img/" + c.Image
+                           }).Skip(limit).Take(space);
+            return Ok(product);
         }
 
-        // PUT api/<controller>/5
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<controller>/5
-        public void Delete(int id)
-        {
-        }
     }
 }
