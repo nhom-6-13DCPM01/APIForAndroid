@@ -95,7 +95,8 @@ namespace APIForAndroid.Controllers
                            }).Skip(limit).Take(space);
             return Ok(product);
         }
-        [Route("api-searchProduct")]
+
+        [Route("api-searchProduct/{key}")]
         [HttpGet]
         public IHttpActionResult searchProduct(string key, [FromUri] int page)
         {
