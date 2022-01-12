@@ -12,7 +12,6 @@ namespace APIForAndroid.Controllers
     public class OrderController : ApiController
     {
         private CandybugWinformEntities DBCandyBug = new CandybugWinformEntities();
-        private int maDonHang;
 
         // GET api/<controller>
         public IEnumerable<string> Get()
@@ -50,16 +49,6 @@ namespace APIForAndroid.Controllers
             return soLuong;
         }
 
-        [Route("getOrderInfoList")]
-        [HttpGet]
-        public void GetOrderInfoList()
-        {
-            var danhSach = DBCandyBug.OrderInfoes.Select(u => new
-            {
-
-            });
-        }
-
         // POST api/<controller>
         public void Post([FromBody] string value)
         {
@@ -69,38 +58,18 @@ namespace APIForAndroid.Controllers
         [HttpPost]
         public IHttpActionResult CreateOrder([FromBody] Oder order)
         {
-            if (!order.Equals(null))
+            Oder oder = new Oder()
             {
-                Oder oder = new Oder()
-                {
-                    IdAcc = order.IdAcc,
-                    DateCreate = order.DateCreate,
-                    Status = order.Status,
-                    DeliveryDate = order.DeliveryDate,
-                    Address = order.Address,
-                    SDT = order.SDT
-                };
-                Oder oderFind = DBCandyBug.Oders.Add(oder);
-                DBCandyBug.SaveChanges();
-                maDonHang = oderFind.Id;
-                return Ok(oderFind);
-            }
-            return null;
-        }
-
-        [Route("addOrderInfo")]
-        [HttpPost]
-        public void addOrderInFo([FromBody] OrderInfo orderInfo)
-        {
-            OrderInfo order = new OrderInfo()
-            {
-                IdOrder = maDonHang,
-                IdProduct = orderInfo.IdProduct,
-                Quantity = orderInfo.Quantity,
-                Total = orderInfo.Total
+                IdAcc = order.IdAcc,
+                DateCreate = DateTime.Now,
+                Status = order.Status,
+                DeliveryDate = null,
+                Address = order.Address,
+                SDT = order.SDT
             };
-            DBCandyBug.OrderInfoes.Add(orderInfo);
+            Oder oderFind = DBCandyBug.Oders.Add(oder);
             DBCandyBug.SaveChanges();
+            return Ok(oderFind);
         }
 
         // PUT api/<controller>/5
@@ -109,8 +78,13 @@ namespace APIForAndroid.Controllers
         }
 
         // DELETE api/<controller>/5
-        public void Delete(int id)
+        [HttpDelete]
+        public String Delete(int id)
         {
+            var order = DBCandyBug.Oders.Find(id);
+            DBCandyBug.Oders.Remove(order);
+            DBCandyBug.SaveChanges();
+            return "Cancel success";
         }
     }
 }

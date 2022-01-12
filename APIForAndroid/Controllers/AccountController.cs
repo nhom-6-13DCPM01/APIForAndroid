@@ -20,6 +20,7 @@ namespace APIForAndroid.Controllers
                                 where c.UserName == account.UserName && c.PassWord == account.PassWord
                                 select new
                                 {
+                                    Id = c.Id,
                                     UserName = c.UserName,
                                     PassWord = c.PassWord,
                                     DisplayName = c.DisplayName,
