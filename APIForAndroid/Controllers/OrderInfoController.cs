@@ -48,13 +48,11 @@ namespace APIForAndroid.Controllers
             {
                 foreach (var item in orderInfoList)
                 {
-                    OrderInfo orderAdd = new OrderInfo()
-                    {
-                        IdOrder = item.IdOrder,
-                        IdProduct = item.IdProduct,
-                        Quantity = item.Quantity,
-                        Total = item.Total
-                    };
+                    OrderInfo orderAdd = new OrderInfo();
+                    orderAdd.IdOrder = item.IdOrder;
+                    orderAdd.IdProduct = item.IdProduct;
+                    orderAdd.Quantity = item.Quantity;
+                    orderAdd.Total = item.Total;
                     DBCandyBug.OrderInfoes.Add(orderAdd);
                     DBCandyBug.SaveChanges();
                 }
