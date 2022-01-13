@@ -72,6 +72,24 @@ namespace APIForAndroid.Controllers
             return Ok(oderFind);
         }
 
+        [Route("api-viewOrder/{idAcc}")]
+        [HttpGet]
+        public IHttpActionResult ViewOrder(int idAcc)
+        {
+            var listOrder = (from c in DBCandyBug.Oders
+                             where c.IdAcc == idAcc
+                             select new
+                             {
+                                 Id = c.Id,
+                                 DateCreate = c.DateCreate,
+                                 Status = c.Status,
+                                 Address = c.Address,
+                                 SDT = c.SDT,
+                                 tongTien = c.OrderInfoes.Sum(u => u.Total)
+                             }).ToList();
+            return Ok(listOrder);
+        }
+
         // PUT api/<controller>/5
         public void Put(int id, [FromBody] string value)
         {
