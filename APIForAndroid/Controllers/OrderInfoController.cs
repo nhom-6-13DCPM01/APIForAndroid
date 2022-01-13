@@ -42,19 +42,25 @@ namespace APIForAndroid.Controllers
 
         [Route("addOrderInfo")]
         [HttpPost]
-        public String addOrderInfo([FromBody] OrderInfo orderInfo)
+        public String addOrderInfo([FromBody] List<OrderInfo> orderInfoList)
         {
-            OrderInfo orderAdd = new OrderInfo()
+            if (!orderInfoList.Equals(null))
             {
-                IdOrder = orderInfo.IdOrder,
-                IdProduct = orderInfo.IdProduct,
-                Quantity = orderInfo.Quantity,
-                Total = orderInfo.Total
-            };
-
-            DBCandyBug.OrderInfoes.Add(orderAdd);
-            DBCandyBug.SaveChanges();
-            return "Xin cảm ơn bạn đã ủng hộ";
+                foreach (var item in orderInfoList)
+                {
+                    OrderInfo orderAdd = new OrderInfo()
+                    {
+                        IdOrder = item.IdOrder,
+                        IdProduct = item.IdProduct,
+                        Quantity = item.Quantity,
+                        Total = item.Total
+                    };
+                    DBCandyBug.OrderInfoes.Add(orderAdd);
+                    DBCandyBug.SaveChanges();
+                }
+                return "Xin cảm ơn bạn đã ủng hộ";
+            }
+            return "Đã có lỗi xảy ra";
         }
 
         // PUT api/<controller>/5
